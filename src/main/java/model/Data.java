@@ -1,7 +1,10 @@
 package model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Data {
-    private String _id;
+    @SerializedName("_id")
+    private String id;
     private String name;
     private String type;
     private int proteins;
@@ -12,14 +15,15 @@ public class Data {
     private String image;
     private String image_mobile;
     private String image_large;
-    private int __v;
+    @SerializedName("__v")
+    private int v;
 
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -102,11 +106,7 @@ public class Data {
         this.image_large = image_large;
     }
 
-    public int get__v() {
-        return __v;
-    }
+    public void setV(int v) {this.v = v;}
 
-    public void set__v(int __v) {
-        this.__v = __v;
-    }
+    public int getV() {return this.v;}
 }

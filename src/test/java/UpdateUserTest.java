@@ -2,6 +2,7 @@ import client.UserClient;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import model.User;
+import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class UpdateUserTest {
         userClient.getDataUser(accessToken);
         user.setEmail(User.getRandomEmail());
         Response response = userClient.setDataUserWithToken(accessToken, new User(user.getEmail(), user.getName()));
-        response.then().assertThat().body("success", equalTo(true)).and().statusCode(200);
+        response.then().assertThat().body("success", equalTo(true)).and().statusCode(HttpStatus.SC_OK);
     }
 
     @Test
@@ -36,7 +37,7 @@ public class UpdateUserTest {
         userClient.getDataUser(accessToken);
         user.setName(User.getRandomName());
         Response response = userClient.setDataUserWithToken(accessToken, new User(user.getEmail(), user.getName()));
-        response.then().assertThat().body("success", equalTo(true)).and().statusCode(200);
+        response.then().assertThat().body("success", equalTo(true)).and().statusCode(HttpStatus.SC_OK);
     }
 
     @Test
@@ -45,7 +46,7 @@ public class UpdateUserTest {
         userClient.getDataUser(accessToken);
         user.setEmail(User.getRandomEmail());
         Response response = userClient.setDataUserWithoutToken(new User(user.getEmail(), user.getName()));
-        response.then().assertThat().body("success", equalTo(false)).and().statusCode(401);
+        response.then().assertThat().body("success", equalTo(false)).and().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
@@ -54,7 +55,7 @@ public class UpdateUserTest {
         userClient.getDataUser(accessToken);
         user.setName(User.getRandomName());
         Response response = userClient.setDataUserWithoutToken(new User(user.getEmail(), user.getName()));
-        response.then().assertThat().body("success", equalTo(false)).and().statusCode(401);
+        response.then().assertThat().body("success", equalTo(false)).and().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @After

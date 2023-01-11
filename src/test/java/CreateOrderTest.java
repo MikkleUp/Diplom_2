@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import model.Ingredient;
 import model.Order;
 import model.User;
+import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,14 +33,14 @@ public class CreateOrderTest {
         ingredientClient = new IngredientClient();
         allIngredient = ingredientClient.getIngredient();
         ingredients = new ArrayList<>();
-        ingredients.add(allIngredient.data.get(0).get_id());
-        ingredients.add(allIngredient.data.get(1).get_id());
-        ingredients.add(allIngredient.data.get(2).get_id());
+        ingredients.add(allIngredient.data.get(0).getId());
+        ingredients.add(allIngredient.data.get(1).getId());
+        ingredients.add(allIngredient.data.get(2).getId());
         user = User.getRandomUser();
         userClient = new UserClient();
         userClient.create(user);
         Response responseForToken = userClient.login(user);
-        responseForToken.then().assertThat().body("success", equalTo(true)).and().statusCode(200);
+        responseForToken.then().assertThat().body("success", equalTo(true)).and().statusCode(HttpStatus.SC_OK);
         accessToken = responseForToken.then().extract().path("accessToken");
 
     }
@@ -50,7 +51,7 @@ public class CreateOrderTest {
         order = new Order(ingredients);
         orderClient = new OrderClient();
         response = orderClient.createOrderWithLogin(accessToken, order);
-        response.then().assertThat().body("success", equalTo(true)).and().statusCode(200);
+        response.then().assertThat().body("success", equalTo(true)).and().statusCode(HttpStatus.SC_OK);
 
     }
 
@@ -61,7 +62,7 @@ public class CreateOrderTest {
         orderClient = new OrderClient();
         order = new Order(ingredients);
         response = orderClient.createOrderWithoutLogin(order);
-        response.then().assertThat().statusCode(200).and().body("success", equalTo(true));
+        response.then().assertThat().statusCode(HttpStatus.SC_OK).and().body("success", equalTo(true));
     }
 
     @Test
@@ -71,18 +72,18 @@ public class CreateOrderTest {
         order = new Order(ingredients);
         orderClient = new OrderClient();
         response = orderClient.createOrderWithLogin(accessToken, order);
-        response.then().assertThat().statusCode(200);
+        response.then().assertThat().statusCode(HttpStatus.SC_OK);
     }
 
     @Test
     @DisplayName("Create order without ingredients")
-    public void createOderWithNullIngredient() {
+    public void createOrderWithNullIngredient() {
 
         ingredients.clear();
         order = new Order(ingredients);
         orderClient = new OrderClient();
         response = orderClient.createOrderWithLogin(accessToken, order);
-        response.then().assertThat().statusCode(400);
+        response.then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
     @Test
@@ -93,7 +94,7 @@ public class CreateOrderTest {
         order = new Order(ingredients);
         orderClient = new OrderClient();
         response = orderClient.createOrderWithLogin(accessToken, order);
-        response.then().assertThat().statusCode(500);
+        response.then().assertThat().statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
     }
 
     @After

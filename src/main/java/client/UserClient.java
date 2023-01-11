@@ -4,6 +4,7 @@ import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import model.User;
+import org.apache.http.HttpStatus;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -41,7 +42,7 @@ public class UserClient extends RestClient {
                 .get(USER_PATH + "user")
                 .then()
                 .assertThat()
-                .statusCode(200)
+                .statusCode(HttpStatus.SC_OK)
                 .and()
                 .body("success", equalTo(true));
     }

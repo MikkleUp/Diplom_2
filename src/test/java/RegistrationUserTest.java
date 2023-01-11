@@ -2,6 +2,7 @@ import client.UserClient;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import model.User;
+import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class RegistrationUserTest {
 
         user = User.getRandomUser();
         response = userClient.create(user);
-        response.then().assertThat().body("success", equalTo(true)).and().statusCode(200);
+        response.then().assertThat().body("success", equalTo(true)).and().statusCode(HttpStatus.SC_OK);
     }
 
     @Test
@@ -34,7 +35,7 @@ public class RegistrationUserTest {
         user = User.getRandomUser();
         userClient.create(user);
         response = userClient.create(user);
-        response.then().assertThat().body("success", equalTo(false)).and().statusCode(403);
+        response.then().assertThat().body("success", equalTo(false)).and().statusCode(HttpStatus.SC_FORBIDDEN);
     }
 
     @Test
@@ -45,7 +46,7 @@ public class RegistrationUserTest {
         user.setEmail(null);
         userClient.create(user);
         response = userClient.create(user);
-        response.then().assertThat().body("success", equalTo(false)).and().statusCode(403);
+        response.then().assertThat().body("success", equalTo(false)).and().statusCode(HttpStatus.SC_FORBIDDEN);
     }
 
     @Test
@@ -56,7 +57,7 @@ public class RegistrationUserTest {
         user.setPassword(null);
         userClient.create(user);
         response = userClient.create(user);
-        response.then().assertThat().body("success", equalTo(false)).and().statusCode(403);
+        response.then().assertThat().body("success", equalTo(false)).and().statusCode(HttpStatus.SC_FORBIDDEN);
     }
 
     @After

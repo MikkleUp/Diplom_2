@@ -2,6 +2,7 @@ import client.UserClient;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import model.User;
+import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class LoginUserTest {
     @DisplayName("Login user with all required fields")
     public void testUserLogin() {
         response = userClient.login(user);
-        response.then().assertThat().body("success", equalTo(true)).and().statusCode(200);
+        response.then().assertThat().body("success", equalTo(true)).and().statusCode(HttpStatus.SC_OK);
     }
 
     @Test
@@ -32,7 +33,7 @@ public class LoginUserTest {
     public void testUserLoginWithIncorrectPassword() {
         user.setPassword("test");
         response = userClient.login(user);
-        response.then().assertThat().body("success", equalTo(false)).and().statusCode(401);
+        response.then().assertThat().body("success", equalTo(false)).and().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
@@ -40,7 +41,7 @@ public class LoginUserTest {
     public void testUserLoginWithIncorrectEmail() {
         user.setEmail("test");
         response = userClient.login(user);
-        response.then().assertThat().body("success", equalTo(false)).and().statusCode(401);
+        response.then().assertThat().body("success", equalTo(false)).and().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @After

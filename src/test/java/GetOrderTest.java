@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import model.Ingredient;
 import model.Order;
 import model.User;
+import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,9 +32,9 @@ public class GetOrderTest {
         ingredientClient = new IngredientClient();
         allIngredient = ingredientClient.getIngredient();
         ingredients = new ArrayList<>();
-        ingredients.add(allIngredient.data.get(0).get_id());
-        ingredients.add(allIngredient.data.get(1).get_id());
-        ingredients.add(allIngredient.data.get(2).get_id());
+        ingredients.add(allIngredient.data.get(0).getId());
+        ingredients.add(allIngredient.data.get(1).getId());
+        ingredients.add(allIngredient.data.get(2).getId());
 
         user = User.getRandomUser();
         userClient = new UserClient();
@@ -49,7 +50,7 @@ public class GetOrderTest {
     @DisplayName("Get order login's user")
     public void getOderForUserWithAuthorizationTest() {
         response = orderClient.getOrderUserWithLogin(accessToken);
-        response.then().assertThat().body("success", equalTo(true)).and().statusCode(200);
+        response.then().assertThat().body("success", equalTo(true)).and().statusCode(HttpStatus.SC_OK);
     }
 
     @Test
@@ -57,7 +58,7 @@ public class GetOrderTest {
     public void getOderForUserWithoutAuthorizationTest() {
 
         response = orderClient.getOrderUserWithoutLogin();
-        response.then().assertThat().body("success", equalTo(false)).and().statusCode(401);
+        response.then().assertThat().body("success", equalTo(false)).and().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @After
